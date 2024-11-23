@@ -1,30 +1,61 @@
 import express from 'express';
-import { ApolloServer } from '@apollo/server-express';
-import { typeDefs, resolvers } from './schemas';
-import connectDB from './config/connection';
-//import { expressMiddleware } from '@apollo/server-express';
+import db from './config/connection.js';
+import path from 'node:path';
+
+//Import ApolloServer and expressMiddleware
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+
+// Import the two parts of a GraphQL schema
+import { typeDefs, resolvers } from './schemas/index.js';
+
+// Import the authenticateToken function
+//import { authenticateToken } from './services/auth.js';
 // import { json } from 'body-parser';
-// import cors from 'cors';
-import { typeDefs} from './schemas/typeDefs';
-import { resolvers } from './schemas/resolvers';
-import  authMiddleware  from '../../client/src/utils/auth';
 
 
-const app = express();
+const server = new ApolloServer({
+  typeDefs, resolvers
+});
+// Create a new instance of an Apollo server with the GraphQL schema
+const startApolloServer = async () => {
 
-// Connect to MongoDB
-connectDB();
+  await server.start(); // Start Apollo Server
+  await db(); // Connect to MongoDB
 
-const server = new ApolloServer({typeDefs, resolvers});
+  const PORT = process.env.PORT || 3001;
+  const app = express();
 
-// Start Apollo Server
-await server.start();
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json());
 
-app.use('/graphql', 
-  expressMiddleware(server, {
-  context: authMiddleware
-}));
+  app.use('/graphql', expressMiddleware(server));
 
-const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => console.log(`🌍 Server running on port :${PORT}`));
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+    });
+  }
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+  });
+};
+
+// Call the async function to start the server
+startApolloServer();
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -2,7 +2,7 @@ import { gql }  from 'graphql-tag';
 // import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
-typer User {
+type User {
 _id: ID
 username: String
 email: String
