@@ -1,28 +1,33 @@
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_ME } from '../graphql/queries';
-import { REMOVE_BOOK } from '../graphql/mutations';
+import { GET_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
 import { removeBookId } from '../utils/localStorage';
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
+import { Book } from '../models/Book';
+
 
 const SavedBooks = () => {
-  const [loading, data] = useQuery(GET_ME); // Fetch user data
+  const { data, loading ,error} = useQuery(GET_ME); // Fetch user data
   const [removeBook] = useMutation(REMOVE_BOOK); // Mutation to remove a book
 
-  const userData = data?.me || {}; // User data or empty object
+  const userData = data.me; // User data or empty object
 
   const handleDeleteBook = async (bookId: string) => {
     try {
+      if (!data || !data.me) {
+      return; 
+    }
       await removeBook({
         variables: { bookId },
         update: cache => {
-          const data = cache.readQuery({ query: GET_ME }); // Read current cache
-          const userDataCache = data.me;
-          const updatedBooks = userDataCache.savedBooks.filter(
+          // const data = cache.readQuery({ query: GET_ME }); // Read current cache
+          // const userDataCache = userData?.me ;
+          const updatedBooks = userData.savedBooks.filter(
             (book: any) => book.bookId !== bookId // Filter out deleted book
           );
           cache.writeQuery({
             query: GET_ME,
-            data: { me: { ...userDataCache, savedBooks: updatedBooks } }, // Write updated cache
+            data: { me: { ...userData, savedBooks: updatedBooks } }, // Write updated cache
           });
         },
       });
@@ -56,7 +61,7 @@ const SavedBooks = () => {
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks.map((book: Book) => {
             return (
               <Col md='4'>
                 <Card key={book.bookId} border='dark'>

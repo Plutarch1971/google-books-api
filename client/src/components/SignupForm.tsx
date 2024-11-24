@@ -52,7 +52,9 @@
 //     });
 //   };
 import { useMutation } from '@apollo/client';
-import { ADD_USER } from '../graphql/mutations';  
+import { ADD_USER } from '../utils/mutations';  
+import type { ChangeEvent, FormEvent } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 consg SignupForm = () => {
   const [ addUser] = useMutation(ADD_USER);
