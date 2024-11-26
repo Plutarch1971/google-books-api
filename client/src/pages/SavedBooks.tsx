@@ -8,6 +8,7 @@ import { Book } from '../models/Book';
 
 const SavedBooks = () => {
   const { data, loading ,error} = useQuery(GET_ME); // Fetch user data
+  console.log(data);
   const [removeBook] = useMutation(REMOVE_BOOK); // Mutation to remove a book
 
   const userData = data.me; // User data or empty object

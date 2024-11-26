@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { useMutation } from '@apollo/client';
 
-import { createUser } from '../utils/API';
-import Auth from '../utils/auth';
+import { ADD_USER } from '../utils/mutations';
+//import { createUser } from '../utils/API';
+import AuthService from '../utils/auth';
 import type { User } from '../models/User';
 
-// biome-ignore lint/correctness/noEmptyPattern: <explanation>
-const SignupForm = ({}: { handleModalClose: () => void }) => {
+
+const SignupForm = ({ handleModalClose } : { handleModalClose: () => void }) => {
   // set initial form state
   const [userFormData, setUserFormData] = useState<User>({ 
     username: '', 
@@ -21,6 +23,8 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
+  const [ addUser ] = useMutation(ADD_USER);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -29,35 +33,52 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+        try {
+          const { data } = await addUser ({
+            variables: { input: {
+              username: userFormData.username,
+              email: userFormData.email,
+              password: userFormData.password
+            }
+          }
+          });
+          AuthService.login(data.addUser.token);
+          handleModalClose();
+        } catch (err) {
+          console.error(err);
+          setShowAlert(true);
+        }
+      };
+
     // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  //   const form = event.currentTarget;
+  //   if (form.checkValidity() === false) {
+  //     event.preventDefault();
+  //     event.stopPropagation();
+  //   }
 
-    try {
-      const response = await createUser(userFormData);
+  //   try {
+  //     const response = await createUser(userFormData);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('something went wrong!');
+  //     }
 
-      const { token } = await response.json();
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
-      setShowAlert(true);
-    }
+  //     const { token } = await response.json();
+  //     Auth.login(token);
+  //   } catch (err) {
+  //     console.error(err);
+  //     setShowAlert(true);
+  //   }
 
-    setUserFormData({
-      username: '',
-      email: '',
-      password: '',
-      savedBooks: [],
-      bookCount: 0,
-    });
-  };
+  //   setUserFormData({
+  //     username: '',
+  //     email: '',
+  //     password: '',
+  //     savedBooks: [],
+  //     bookCount: 0,
+  //   });
+  // };
 // import { useMutation } from '@apollo/client';
 // import { ADD_USER } from '../utils/mutations';  
 // import type { ChangeEvent, FormEvent } from 'react';
