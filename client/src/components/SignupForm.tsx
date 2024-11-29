@@ -4,7 +4,6 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 
 import { ADD_USER } from '../utils/mutations';
-//import { createUser } from '../utils/API';
 import AuthService from '../utils/auth';
 import type { User } from '../models/User';
 
@@ -35,11 +34,10 @@ const SignupForm = ({ handleModalClose } : { handleModalClose: () => void }) => 
 
         try {
           const { data } = await addUser ({
-            variables: { input: {
+            variables: { 
               username: userFormData.username,
               email: userFormData.email,
               password: userFormData.password
-            }
           }
           });
           AuthService.login(data.addUser.token);
@@ -50,62 +48,7 @@ const SignupForm = ({ handleModalClose } : { handleModalClose: () => void }) => 
         }
       };
 
-    // check if form has everything (as per react-bootstrap docs)
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false) {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-
-  //   try {
-  //     const response = await createUser(userFormData);
-
-  //     if (!response.ok) {
-  //       throw new Error('something went wrong!');
-  //     }
-
-  //     const { token } = await response.json();
-  //     Auth.login(token);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setShowAlert(true);
-  //   }
-
-  //   setUserFormData({
-  //     username: '',
-  //     email: '',
-  //     password: '',
-  //     savedBooks: [],
-  //     bookCount: 0,
-  //   });
-  // };
-// import { useMutation } from '@apollo/client';
-// import { ADD_USER } from '../utils/mutations';  
-// import type { ChangeEvent, FormEvent } from 'react';
-// import { Form, Button, Alert } from 'react-bootstrap';
-
-// consg SignupForm = () => {
-//   const [ addUser] = useMutation(ADD_USER);
-
-//   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//     try{
-//       const { data} = await addUser({
-//         variables: {...userFormData}
-//       });
-//       Auth.login(data.addUser.token);
-//     } catch (err) {
-//       console.error(err);
-//       setShowAlert(true);
-//     }
-//     setUserFormData({
-//       username: '',
-//       email: '',
-//       password: '',
-//       savedBooks: [],
-//     });
-// }
-
+ 
   return (
     <>
       {/* This is needed for the validation functionality above */}

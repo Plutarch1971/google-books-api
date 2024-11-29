@@ -2,6 +2,8 @@ import { AuthenticationError } from "apollo-server-express";
 import User from "../models/User.js";
 import { signToken } from "../services/auth.js";
 import { BookDocument } from "../models/Book.js";
+import AuthService from "../services/auth.js";
+
 
 interface UserLogin {
   email: string;
@@ -18,26 +20,49 @@ interface BookData {
 
 export const resolvers = {
   Query: {
-    me: async (_ : any, __ : any, context : any) => {
-      if (!context.user) throw new AuthenticationError("Not logged in");
+    me: async (_parent: any, _args : any, context : any) => {
+      console.log('Me Query context:',context);
+      console.log('Context user:',context.user);
+      if (!context.user){
+        console.log('No user in context');
+        throw new AuthenticationError("Not logged in");}
       return User.findById(context.user._id);
     },
   },
+  // Query: {
+  //   me: async (_parent: any, __args: any, context: any) => {
+  //     const { user } = context;
+
+  //     if (!user) {
+  //       throw new AuthenticationError('You must be logged in to view this information');
+  //     }
+  //     try {
+  //     // Fetch and return user data
+  //     const foundUser = await User.findById(user._id).populate('savedBooks');
+  //     return foundUser;
+  //   } catch (err) {
+  //     console.error('Error fetching user data:', err);
+  //     throw new AuthenticationError('Error fetching user data');
+  //   }
+  // },
+
   Mutation: {
-    login: async (_ : any, { email, password }: UserLogin )=> {
+    login: async (_parent: any, { email, password }: UserLogin )=> {
       const user = await User.findOne({ email });
       if (!user || !(await user.isCorrectPassword(password))) {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user.username, user.email, user._id);
+      //Client side
+      AuthService.login(token);
       return { token, user };
     },
-    addUser: async (_ : any, { username, email, password }: UserSignup) => {
+    addUser: async (_parent : any, { username, email, password }: UserSignup) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user.username, user.email, user._id);
       return { token, user };
     },
-    saveBook: async (_ : any, { bookData }:BookData, context : any) => {
+    saveBook: async (_parent: any, { bookData }:BookData, context : any) => {
       if (!context.user) throw new AuthenticationError("Not logged in");
       return User.findByIdAndUpdate(
         context.user._id,
@@ -45,7 +70,7 @@ export const resolvers = {
         { new: true }
       );
     },
-    removeBook: async (_ : any, { bookId }: { bookId: string }, context : any) => {
+    removeBook: async (_parent : any, { bookId }: { bookId: string }, context : any) => {
       if (!context.user) throw new AuthenticationError("Not logged in");
       return User.findByIdAndUpdate(
         context.user._id,
@@ -54,4 +79,5 @@ export const resolvers = {
       );
     },
   },
-};
+}
+export default resolvers;
