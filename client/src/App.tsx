@@ -1,5 +1,3 @@
-//npm install @apollo/client graphql
-// ? in which directory we must run this command
 import { Outlet } from 'react-router-dom';
 import './App.css';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';

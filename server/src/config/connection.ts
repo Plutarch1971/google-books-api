@@ -8,7 +8,7 @@ const openDB = async (): Promise<typeof mongoose.connection> =>{
             throw new Error('MongoDB URI is not defined in environment variables');
         }
 
-        await mongoose.connect(process.env.MONGODB_URI); 
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks'); 
         console.log('Database connected.');
         return mongoose.connection;
     } catch(error) {
