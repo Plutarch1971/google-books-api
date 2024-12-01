@@ -2,7 +2,7 @@ services:
   - type: web
     name: google-books-api
     buildCommand: npm run render-build
-    startCommand: npm start
+    startCommand: node server/index.js
     
     envVars:
       - key: NODE_VERSION
