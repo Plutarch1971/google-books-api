@@ -4,7 +4,11 @@ dotenv.config();
 
 const openDB = async (): Promise<typeof mongoose.connection> =>{
     try {
-        await mongoose.connect(process.env.MONGODB_URI || '');
+        if (!process.env.MONGODB_URI) {
+            throw new Error('MongoDB URI is not defined in environment variables');
+        }
+
+        await mongoose.connect(process.env.MONGODB_URI); 
         console.log('Database connected.');
         return mongoose.connection;
     } catch(error) {
@@ -12,6 +16,9 @@ const openDB = async (): Promise<typeof mongoose.connection> =>{
         throw new Error('Database connection failed.');
     }
 }
-const db = openDB();
+const db = openDB().catch((error) => {
+    console.error('Failed to connect to the database:',error)
+    process.exit(1)
+});
 
 export default db;

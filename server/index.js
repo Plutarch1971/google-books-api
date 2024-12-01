@@ -1,3 +1,3 @@
 import './dist/server.js';
+export {};
 
-export * from './dist/server.js';
