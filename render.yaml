@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: your-app-name
+    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
+    startCommand: 
+    
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
