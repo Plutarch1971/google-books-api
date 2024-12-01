@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: your-app-name
-    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
-    startCommand: 
+    name: google-books-api
+    buildCommand: npm run render-build
+    startCommand: npm start
     
     envVars:
       - key: NODE_VERSION

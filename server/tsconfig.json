@@ -1,16 +1,33 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "target": "ES2020" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     /* Modules */
+    "module": "ESNext" /* Specify what module code is generated. */,
     "rootDir": "src" /* Specify the root folder within your source files. */,
 
     /* Emit */
-    "outDir": "dist" ,/* Specify an output folder for all emitted files. */
+    "outDir": "./dist" ,/* Specify an output folder for all emitted files. */
+    "strict": true,
     // "noEmitOnError": true /* Disable emitting files if any type checking errors are reported. */
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+
     "paths": {
       "@utils/*": ["../../client/src/utils/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "typeRoots": ["./node_modules/@types", "./src/types"]
 }
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",//added
+//     "module": "ESNext",//added
+//     "outDir": "./dist",
+//     "strict": true,//added
+//     "esModuleInterop": true,//added
+//     "moduleResolution": "node"//added
+//   },
+//   "include": ["src/**/*"]
+// }
