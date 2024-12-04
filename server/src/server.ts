@@ -21,7 +21,7 @@ const startApolloServer = async () => {
   await server.start(); // Start Apollo Server
   await db; // Connect to MongoDB
 
-  const PORT = process.env.PORT || 10000;
+  const PORT = process.env.PORT || 3000;
   const app = express();
 
   app.use(express.urlencoded({ extended: false }));

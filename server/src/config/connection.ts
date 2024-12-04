@@ -2,13 +2,15 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 
+console.log('MONGODB_URI',process.env.MONGODB_URI);
+
+
 const openDB = async (): Promise<typeof mongoose.connection> =>{
     try {
-        if (!process.env.MONGODB_URI) {
+        if(!process.env.MONGODB_URI) {
             throw new Error('MongoDB URI is not defined in environment variables');
         }
-
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/googlebooks'); 
+        await mongoose.connect(process.env.MONGODB_URI); 
         console.log('Database connected.');
         return mongoose.connection;
     } catch(error) {
