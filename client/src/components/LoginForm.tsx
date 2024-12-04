@@ -37,7 +37,7 @@ const LoginForm = ({ handleModalClose} : { handleModalClose: () => void }) => {
           variables: { email: userFormData.email, password: userFormData.password},
       });
       
-      localStorage.setItem('id_token', data.login.token);
+      //gilocalStorage.setItem('id_token', data.login.token);
       AuthService.login(data.login.token);
       handleModalClose();
     } catch (err) {
