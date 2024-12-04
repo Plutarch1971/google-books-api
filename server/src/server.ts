@@ -1,6 +1,6 @@
 import express from 'express';
 import db from './config/connection.js';
-import path from 'node:path';
+import path from 'path';
 import { fileURLToPath } from 'url';
 import { ApolloServer } from '@apollo/server';
 
@@ -34,10 +34,10 @@ const startApolloServer = async () => {
   ));
 
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.get('*', (_req, res) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
     });
   }
   app.listen(PORT, () => {
