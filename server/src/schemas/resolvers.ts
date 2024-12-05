@@ -2,7 +2,7 @@ import { AuthenticationError } from "apollo-server-express";
 import User from "../models/User.js";
 import { signToken } from "../services/auth.js";
 import { BookDocument } from "../models/Book.js";
-import AuthService from "../services/auth.js";
+
 
 
 interface UserLogin {
@@ -54,12 +54,12 @@ export const resolvers = {
       }
       const token = signToken(user.username, user.email, user._id);
       //Client side
-      AuthService.login(token);
       return { token, user };
     },
     addUser: async (_parent : any, { username, email, password }: UserSignup) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user.username, user.email, user._id);
+      console.log('Token', token);
       return { token, user };
     },
     saveBook: async (_parent: any, { bookData }:BookData, context : any) => {

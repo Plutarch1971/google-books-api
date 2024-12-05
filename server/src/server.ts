@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 const server = new ApolloServer({
   typeDefs, 
   resolvers,
-  //context: authenticateToken, 
+ // context: authenticateToken, 
 });
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
@@ -21,7 +21,7 @@ const startApolloServer = async () => {
   await server.start(); // Start Apollo Server
   await db; // Connect to MongoDB
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3001;
   const app = express();
 
   app.use(express.urlencoded({ extended: false }));
