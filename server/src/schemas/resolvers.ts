@@ -53,6 +53,7 @@ export const resolvers = {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user.username, user.email, user._id);
+      console.log("Token in Resolver File:", token);
       //Client side
       return { token, user };
     },

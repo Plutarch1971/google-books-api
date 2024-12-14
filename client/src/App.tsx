@@ -8,7 +8,7 @@ const client = new ApolloClient({
   uri: '/graphql',
   cache: new InMemoryCache(),
   headers: {
-    authorization: localStorage.getItem('token') || '',
+    authorization: localStorage.getItem('id_token') || '',
   },
 });
 

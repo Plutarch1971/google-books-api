@@ -96,9 +96,11 @@ export const authenticateToken = async ({ req }: any) => {
   // Get the token from the request
   //const token = req.headers.authorization?.split(' ')[1] || '';
   let token = req.body.token || req.query.token || req.header.authorization
+  console.log(token);
   if( req.header.authorization){
     token = token.split(' ').pop().trim();
   }
+  
   // If no token is provided, return an object with null user
   if (!token) {
     console.log('No token provided');
