@@ -20,9 +20,6 @@ const LoginForm = ({ handleModalClose} : { handleModalClose: () => void }) => {
 
   const [ login, { error }] = useMutation(LOGIN_USER);
     
-    // if (error) {
-    //   console.error(error);
-    // };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -51,7 +48,7 @@ const LoginForm = ({ handleModalClose} : { handleModalClose: () => void }) => {
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-          Something went wrong with your login credentials!
+          Something went wrong with your login credentials! Please try again using letters and numbers.
         </Alert>
         <Form.Group className='mb-3'>
           <Form.Label htmlFor='email'>Email</Form.Label>

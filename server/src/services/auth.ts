@@ -73,4 +73,3 @@ export class AuthenticationError extends GraphQLError {
   }
 };
 
-// export default ServerAuthServices;
